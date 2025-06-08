@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+</head>
+<body>
+    <div class="card">
+        <div class="search">
+            <input type="text" placeholder="Enter the City Name" spellcheck="false">
+            <button ><img src="https://th.bing.com/th/id/OIP.veUAjISD_o70mdcAf1P2awHaHa?w=980&h=980&rs=1&pid=ImgDetMain" ></button>
+       <div class="error">
+        <p>Invalid City Name</p>
+       </div>
+        </div>
+        <div class="weather">
+            <img src="https://cdn2.iconfinder.com/data/icons/weather-and-season-1/60/shiny-weather-clear-512.png" class="weather-icon">
+            <h1 class="temp">22<sup>o</sup>C</h1>
+            <h3 class="weathermain">The wheather is Clear in </h3>
+            <h2 class="city">Delhi</h2>
+            <div class="details">
+                
+                </div>
+                <div class="col">
+                    <img src="https://cdn-icons-png.flaticon.com/512/9290/9290540.png" >
+                </div>
+                <p class="humidity">50%</p>
+                <p class="hum-text">Humidity</p>
+            
+            <div class="col">
+                <img src="https://th.bing.com/th/id/R.d31115d89e96ab26ee5022dfb5e94f3e?rik=V%2bH0ln5n0tJKtg&riu=http%3a%2f%2fwww.pngall.com%2fwp-content%2fuploads%2f5%2fWind-PNG-HD-Image.png&ehk=%2f%2b2udm5sExoDVd53BBCNM4lUpR33VIndTgZxeRxkXrY%3d&risl=&pid=ImgRaw&r=0" >
+            </div>
+            <p class="wind">15km/h</p>
+            <p class="wind-text">Wind Speed</p>
+        </div>
+        </div>
+        </div>
+    </div>
+    <script>
+        const apiKey="48c60c24add6bcdc4d331e41d2078381";
+        const apiUrl="https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+        const searchBox = document.querySelector(".search input");
+        const searchBtn = document.querySelector(".search button");
+        const weatherIcon = document.querySelector(".weather-icon");
+        const weatherMain = document.querySelector(".weathermain");
+        async function checkWeather(city){
+            const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+
+            if(response.status == 404){
+                document.querySelector(".error").style.display ="block";
+                document.querySelector(".weather").style.display ="none";
+            }else{
+                var data=await response.json();
+            }
+            
+            
+            
+            document.querySelector(".city").innerHTML = data.name;
+            document.querySelector(".temp").innerHTML = Math.round(data.main.temp)+ `<sup>o</sup>C`;
+            document.querySelector(".humidity").innerHTML = data.main.humidity +"%";
+            document.querySelector(".wind").innerHTML = data.wind.speed +"Km/h";
+            //document.querySelector(".weathermain").innerHTML ="it is "+ data.weather[0].main +"ing in";
+
+            if (data.weather[0].main == "Clouds"){
+                weatherIcon.src ="https://www.pngmart.com/files/11/Weather-Cloud-PNG.png";
+                document.querySelector(".weathermain").innerHTML ="There are "+ data.weather[0].main +" in";
+            }
+
+            else if(data.weather[0].main == "Clear"){
+                weatherIcon.src ="https://cdn2.iconfinder.com/data/icons/weather-and-season-1/60/shiny-weather-clear-512.png";
+                document.querySelector(".weathermain").innerHTML ="The Weather is "+ data.weather[0].main +" in";
+            }
+            else if(data.weather[0].main == "Rain"){
+                weatherIcon.src ="https://th.bing.com/th/id/OIP.0OqtSn7BcN8r__X4aYkgcgHaFQ?rs=1&pid=ImgDetMain";
+                document.querySelector(".weathermain").innerHTML ="it is "+ data.weather[0].main +"ing in";
+            }
+            else if(data.weather[0].main == "Drizzle"){
+                weatherIcon.src ="https://th.bing.com/th/id/OIP.ewyzuLYFqbvrmlgdVmVSuAHaHa?rs=1&pid=ImgDetMain";
+                document.querySelector(".weathermain").innerHTML ="it is "+ data.weather[0].main +"ing in";
+            }
+           else if (data.weather[0].main == "Mist"){
+                weatherIcon.src ="https://cdn1.iconfinder.com/data/icons/weather-filled-outline-1/50/Weather_Filled_Outline-26-512.png";
+                document.querySelector(".weathermain").innerHTML ="There is  "+ data.weather[0].main +"y season in";
+            }
+            else if (data.weather[0].main == "Snow"){
+                weatherIcon.src ="https://th.bing.com/th/id/R.715f81f0596f419ec433d39ed2dd5b2b?rik=JQR8dBhMH6hGdg&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fpng-snowy-file-snow-svg-1024.png&ehk=P8V1bmhBbJqMKNpTyrisq2HfzPqTOpXdR34e07vfZto%3d&risl=&pid=ImgRaw&r=0";
+                document.querySelector(".weathermain").innerHTML ="it is "+ data.weather[0].main +"ing in";
+            }
+            
+            document.querySelector(".weather").style.display = "block";
+            document.querySelector(".error").style.display = "none";
+        }
+        searchBtn.addEventListener("click",()=>{
+            checkWeather(searchBox.value);
+        })
+        checkWeather();
+        
+    </script>
+    
+</body>
+</html>
